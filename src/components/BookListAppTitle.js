@@ -3,7 +3,7 @@ import React from 'react';
 const BookListAppTitle = (props) => (
   <div className='App-header'>
     <h2>{ props.title }</h2>
-    <button onClick={ props.DoClick }>DO CLICK</button>
+    <button onClick={ props.doClick }>DO CLICK</button>
   </div>
 );
 
