@@ -1,15 +1,36 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import BookListAppTitle from '../../components/BookListAppTitle.js';
 import BookListAppSearch from '../../components/BookListAppSearch.js';
 import BookListAppList from '../../components/BookListAppList.js';
+import { bookList } from './data.js';
 import './styles.css';
-import { bookList } from './data.js'
 
-class App extends Component {
+import { createStore } from 'redux';
+import books from './reducers';
+import { addBook } from '../../actions';
+
+
+let store = createStore(books);
+
+export default class App extends Component {
   constructor(){
     super();
     this.title = 'Book List App';
-    this.bookList = { bookList };
+    this.state = {
+      filter: ''
+    };
+    this.addBook = this.addBook.bind(this);
+    this.setFilter = this.setFilter.bind(this);
+  }
+
+  componentWillMount(){
+    getBooksFromFakeXHR()
+      .then( books => {
+        books.forEach( book => {
+          this.props.onAddBook(book.title, book.author);
+        });
+      })
   }
 
   doClick = () => {
@@ -19,10 +40,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <BookListAppTitle
-          title={this.title}
-          doClick={this.doClick}
-        />
+        <BookListAppTitle={this.title}/>
+        <BookFilterInput setFilter={this.setFilter}/>
+        <BookList books={this.props.books}/>
         <BookListAppSearch/>
         <BookListAppList
           list={ bookList }
@@ -32,4 +52,21 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    books: state.books
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddBook: (title, author) => {
+      dispatch(addBook(title, author));
+    }
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
