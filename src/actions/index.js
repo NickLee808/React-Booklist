@@ -7,3 +7,10 @@ export function addBook(title, author){
     author
   };
 }
+
+export const updateBooks = books => {
+  return {
+    type: 'UPDATE_BOOKS',
+    books
+  };
+};

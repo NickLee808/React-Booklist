@@ -1,63 +1,68 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import BookListAppTitle from '../../components/BookListAppTitle.js';
-import BookListAppSearch from '../../components/BookListAppSearch.js';
-import BookListAppList from '../../components/BookListAppList.js';
-import { bookList } from './data.js';
+import Books from '../../components/Book.js';
+import BookListArray from '../../lib/lib.js';
 import './styles.css';
-
 import { createStore } from 'redux';
-import books from './reducers';
-import { addBook } from '../../actions';
-
-
+import {connect } from 'react-redux';
+import books from '../../reducers';
+import {addBook} from '../../actions';
 let store = createStore(books);
-
-export default class App extends Component {
-  constructor(){
+store.dispatch(addBook('HACK THE PLANET', 'Borgz'));
+console.log(store.getState());
+class App extends Component {
+  constructor (){
     super();
     this.title = 'Book List App';
+    this.book = [];
     this.state = {
-      filter: ''
+      books : BookListArray,
+      value: 'Search by Author or Title'
     };
-    this.addBook = this.addBook.bind(this);
-    this.setFilter = this.setFilter.bind(this);
   }
-
-  componentWillMount(){
-    getBooksFromFakeXHR()
-      .then( books => {
-        books.forEach( book => {
-          this.props.onAddBook(book.title, book.author);
-        });
-      })
+  // componentWillMount() {
+  //   getBooksFromFakeXHR()
+  //   .then( books => {
+  //     books.forEach( book => {
+  //       this.props.onAddBook(book.title, book.author);
+  //     })
+  //   }) 
+  // }
+  handleChange = () =>{
+    this.setState({value: event.target.value});
   }
-
-  doClick = () => {
-    console.log( this.title );
-  }
-
+  // addBook(book){
+  //   addBookToFakeXHR(book)
+  //     .then(books =>{
+  //       this.
+  //     })
+  // }
   render() {
     return (
       <div className="App">
-        <BookListAppTitle={this.title}/>
-        <BookFilterInput setFilter={this.setFilter}/>
-        <BookList books={this.props.books}/>
-        <BookListAppSearch/>
-        <BookListAppList
-          list={ bookList }
+        <BookListAppTitle title={this.title}/>
+        <form>
+        <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </form>
+        
+        <ul>
+          {this.state.books.map(({_id, title, author}) =>
+             <Books
+        key={_id}
+        title={title}
+        author={author}
         />
+            )}
+          </ul>
       </div>
     );
   }
-}
-
+};
 const mapStateToProps = (state) => {
   return {
     books: state.books
   }
 };
-
 const mapDispatchToProps = (dispatch) => {
   return {
     onAddBook: (title, author) => {
@@ -65,7 +70,6 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 };
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps

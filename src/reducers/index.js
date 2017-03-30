@@ -1,6 +1,14 @@
+import { combineReducers } from 'redux';
+import books from './books';
 import { ADD_BOOK } from '../actions';
 
-const initialState = {
+const reducers = combineReducers({
+  books
+});
+
+export default reducers;
+
+/*const initialState = {
   books: []
 };
 
@@ -20,4 +28,4 @@ export default function books(state = initialState, action) {
     default:
       return state;
   }
-}
+}*/
