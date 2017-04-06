@@ -4,9 +4,9 @@ import Books from '../../components/Book.js';
 import BookListArray from '../../lib/lib.js';
 import './styles.css';
 import { createStore } from 'redux';
-import {connect } from 'react-redux';
+import { connect } from 'react-redux';
 import books from '../../reducers';
-import {addBook} from '../../actions';
+import { addBook } from '../../actions';
 let store = createStore(books);
 store.dispatch(addBook('HACK THE PLANET', 'Borgz'));
 console.log(store.getState());
@@ -58,11 +58,15 @@ class App extends Component {
     );
   }
 };
+
+// takes Redux's newly made state and maps it to props
 const mapStateToProps = (state) => {
   return {
     books: state.books
   }
 };
+
+// 
 const mapDispatchToProps = (dispatch) => {
   return {
     onAddBook: (title, author) => {
@@ -70,6 +74,8 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 };
+
+// ties everything together from Redux to React
 export default connect(
   mapStateToProps,
   mapDispatchToProps

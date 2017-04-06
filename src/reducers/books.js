@@ -7,6 +7,7 @@ const initialState = {
 function books(state = initialState, action){ 
   switch(action.type) {
     case ADD_BOOK:
+      //creates empty opbject, takes current state, assigns it to the new empty object
       return Object.assign({}, state, {
         books: [
           ...state.books,
@@ -16,6 +17,7 @@ function books(state = initialState, action){
           }
         ]
       });
+    //if no other case called, do this
     default:
       return state;
   }
